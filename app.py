@@ -411,7 +411,7 @@ def dashboard():
 
     nombres_amistades, imagenes_amistades = {}, {}
     for a in amistades:
-        amigo_id = a.solicitado_id if a.solicitante_id == usuario.id else a.solicitado_id
+        amigo_id = amigo_id = a.solicitado_id if a.solicitante_id == usuario.id else a.solicitante_id
         amigo = Usuario.query.get(amigo_id)
         if amigo:
             nombres_amistades[amigo_id] = amigo.nick
