@@ -30,5 +30,6 @@ Pudiendo apuntar cada gasto y siendo calculado en tiempo real:
 
 Dentro de la web existen roles, pudiendo ser admin o un usuario normal. Los usuarios con rol de admin podrán aprobar nuevos registros de usuarios o intentos de cambio de contraseña de los usuarios:
 
-<img width="1323" height="746" alt="imagen" src="https://github.com/user-attachments/assets/3d4864e9-a51d-4d80-9420-164168b2a6f9" />
+<img width="1274" height="752" alt="imagen" src="https://github.com/user-attachments/assets/2a89dd22-eb4a-4d55-a015-dfe82f98d574" />
+
 
