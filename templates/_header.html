@@ -1,0 +1,21 @@
+{# templates/_header.html #}
+<header>
+  {% if usuario_actual %}
+    <a href="{{ url_for('dashboard') }}">
+      <button>← Volver al Panel</button>
+    </a>
+
+    {% if es_admin %}
+    <a href="{{ url_for('admin_listado_usuarios') }}">
+      <button>⚙️ Gestión Admin</button>
+    </a>
+    {% endif %}
+  {% else %}
+    <a href="{{ url_for('login') }}">
+      <button>Iniciar sesión</button>
+    </a>
+    <a href="{{ url_for('registro') }}">
+      <button>Crear cuenta</button>
+    </a>
+  {% endif %}
+</header>

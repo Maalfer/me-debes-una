@@ -1,0 +1,6 @@
+Flask
+Flask_SQLAlchemy
+Werkzeug
+pillow
+python-dotenv
+itsdangerous

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block title %}Panel{% endblock %}
+
+{% block extra_head %}{% endblock %}
+
+{% block content %}
+<div class="dashboard-page">
+  <div class="dash-card">
+    <div class="dash-actions">
+      <div class="dash-user">
+        <img src="{{ url_for('static', filename='perfiles/' + usuario.imagen) }}" class="dash-avatar" alt="avatar">
+        <h2 class="dash-hello">
+          Hola <span class="dash-hello-accent">{{ usuario.nick }}</span>
+        </h2>
+      </div>
+
+      <div class="dash-buttons">
+        <a href="{{ url_for('perfil') }}" class="dash-btn">Perfil</a>
+        <a href="{{ url_for('logout') }}" class="dash-btn">Cerrar sesión</a>
+        {# Si quieres añadir acceso admin: #}
+        {# {% if es_admin %}<a href="{{ url_for('admin_listado_usuarios') }}" class="dash-btn">Gestión Admin</a>{% endif %} #}
+      </div>
+    </div>
+
+    <hr class="dash-sep">
+
+    <form action="{{ url_for('buscar') }}" method="get" class="dash-form">
+      <input type="text" name="q" placeholder="Buscar usuarios...">
+      <button type="submit">Buscar</button>
+    </form>
+
+    <h3 class="dash-title">Solicitudes de amistad</h3>
+    <ul class="dash-list">
+      {% for pet in peticiones %}
+        <li class="dash-item dash-request">
+          <img src="{{ url_for('static', filename='perfiles/' + imagenes_peticiones[pet.id]) }}" class="dash-avatar" alt="avatar">
+          <span class="dash-name">{{ nombres_peticiones[pet.id] }}</span>
+          <a href="{{ url_for('aceptar_peticion', id=pet.id) }}" class="dash-inline-link">✅ Aceptar</a>
+        </li>
+      {% else %}
+        <li class="dash-empty">No tienes solicitudes</li>
+      {% endfor %}
+    </ul>
+
+    <h3 class="dash-title">Amigos</h3>
+    <ul class="dash-list">
+      {% for amigo in amistades %}
+        {% if amigo.solicitante_id == usuario.id %}
+          {% set id_amigo = amigo.solicitado_id %}
+        {% else %}
+          {% set id_amigo = amigo.solicitante_id %}
+        {% endif %}
+        <li class="dash-item dash-friend">
+          <img src="{{ url_for('static', filename='perfiles/' + imagenes_amistades[id_amigo]) }}" class="dash-avatar" alt="avatar">
+          <a href="{{ url_for('chat', amigo_id=id_amigo) }}" class="dash-inline-link">💬 {{ nombres_amistades[id_amigo] }}</a>
+        </li>
+      {% else %}
+        <li class="dash-empty">No tienes amigos aún</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

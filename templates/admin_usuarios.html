@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>Panel de administración — Usuarios</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!-- Hoja de estilos global -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body class="admin-page">
+
+  <!-- Header con botón Perfil y Admin -->
+  <header class="header">
+    <div class="wrap header-inner">
+      <div class="brand">Me Debes Una</div>
+      <nav class="nav">
+        <a href="{{ url_for('dashboard') }}">Inicio</a>
+        <a href="{{ url_for('perfil') }}">Perfil</a>
+        <a href="{{ url_for('admin_listado_usuarios') }}" class="btn-prim">Admin: Usuarios</a>
+        <a href="{{ url_for('logout') }}">Salir</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="page">
+      <h1>Panel de administración — Usuarios</h1>
+      <p class="help">Aprueba nuevas cuentas, gestiona reseteos de contraseña, cambia roles o elimina usuarios.</p>
+
+      <table class="tabla-usuarios">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nick</th>
+            <th>Email</th>
+            <th>Estado cuenta</th>
+            <th>Reset contraseña</th>
+            <th>Rol</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in usuarios %}
+          <tr>
+            <td>{{ u.id }}</td>
+            <td>{{ u.nick }}</td>
+            <td>{{ u.email }}</td>
+
+            <!-- Estado de cuenta -->
+            <td>
+              {% if u.aprobado %}
+                <span class="badge badge-ok">Aprobado</span>
+              {% else %}
+                <span class="badge badge-warn">Pendiente</span>
+                <form action="{{ url_for('admin_aprobar_usuario', user_id=u.id) }}" method="post" class="form-inline mt-35">
+                  <button type="submit" class="btn btn-approve">Aprobar registro</button>
+                </form>
+              {% endif %}
+            </td>
+
+            <!-- Estado de reset de contraseña -->
+            <td>
+              {% if u.reset_password_hash %}
+                <span class="badge badge-warn">Solicitud pendiente</span>
+                <div class="action-group mt-35">
+                  <form action="{{ url_for('admin_aprobar_reset', user_id=u.id) }}" method="post" class="form-inline">
+                    <button type="submit" class="btn btn-approve">Aprobar reset</button>
+                  </form>
+                  <form action="{{ url_for('admin_rechazar_reset', user_id=u.id) }}" method="post" class="form-inline">
+                    <button type="submit" class="btn btn-warn">Rechazar reset</button>
+                  </form>
+                </div>
+              {% else %}
+                <span class="badge">Sin solicitud</span>
+              {% endif %}
+            </td>
+
+            <!-- Rol -->
+            <td>
+              <form action="{{ url_for('admin_cambiar_rol', user_id=u.id) }}" method="post" class="form-inline">
+                <select name="rol" aria-label="Seleccionar rol">
+                  <option value="user"  {{ 'selected' if u.role == 'user' else '' }}>user</option>
+                  <option value="admin" {{ 'selected' if u.role == 'admin' else '' }}>admin</option>
+                </select>
+                <button type="submit" class="btn">Guardar</button>
+              </form>
+            </td>
+
+            <!-- Acciones -->
+            <td>
+              <form action="{{ url_for('admin_eliminar_usuario', user_id=u.id) }}" method="post" onsubmit="return confirm('¿Eliminar al usuario {{ u.nick }}?');" class="form-inline">
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+              </form>
+            </td>
+
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+
+    </section>
+  </main>
+
+</body>
+</html>

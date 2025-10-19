@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}Página no encontrada · 404{% endblock %}
+
+{% block content %}
+<main class="nf-wrap">
+  <section class="nf-card" role="alert" aria-live="polite">
+    <div class="nf-illust">
+      <img src="{{ url_for('static', filename='not-found.png') }}" alt="Página no encontrada">
+    </div>
+
+    <h1 class="nf-title">404</h1>
+    <p class="nf-subtitle">Uy… no hemos encontrado esa página.</p>
+    <p class="nf-text">
+      Es posible que el enlace esté roto o que la página haya sido movida.
+    </p>
+
+    <div class="nf-actions">
+      <a href="{{ url_for('index') }}" class="btn btn-primary">Volver al inicio</a>
+      <a href="{{ url_for('buscar') }}" class="btn btn-ghost">Ir a Buscar</a>
+    </div>
+  </section>
+</main>
+{% endblock %}

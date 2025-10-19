@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+
+{% block title %}Chat con {{ amigo.nick }}{% endblock %}
+
+{# No cargamos style.css aquí; ya lo hace base.html para evitar conflictos de layout #}
+{% block extra_head %}{% endblock %}
+
+{% block content %}
+<div class="chat-main chat-page">
+  <div class="chat-card">
+    <h2 class="chat-title">Gastos con {{ amigo.nick }}</h2>
+
+    <div class="balance-message {% if balance < 0 %}negative-balance{% elif balance > 0 %}positive-balance{% endif %}">
+      {{ balance_msg }}
+    </div>
+
+    <form method="post" class="chat-form">
+      <div class="form-group">
+        <input type="number" name="cantidad" step="0.01" placeholder="Cantidad (€)" required>
+      </div>
+      <div class="form-group">
+        <input type="text" name="descripcion" placeholder="Descripción" required>
+      </div>
+      <button type="submit">➕ Añadir gasto</button>
+    </form>
+
+    <ul class="gastos-list">
+      {# La vista ya limita a 10. Mostramos tal cual para mantener posiciones cronológicas, incluidos eliminados. #}
+      {% for g in gastos %}
+        <li class="gasto-item">
+          {% if g.eliminado %}
+            <span class="gasto-eliminado">
+              gasto eliminado por el usuario {{ nombres[g.usuario_id] }}
+              {% if g.eliminado_en %} ({{ g.eliminado_en|formato_fecha }}){% endif %}
+            </span>
+
+            {# Botón restaurar solo para el autor #}
+            {% if g.usuario_id == session['usuario_id'] %}
+            <div class="acciones">
+              <form action="{{ url_for('restaurar_gasto', gasto_id=g.id) }}" method="post">
+                <button type="submit" class="btn-link">Restaurar</button>
+              </form>
+            </div>
+            {% endif %}
+          {% else %}
+            <span class="gasto-text">{{ nombres[g.usuario_id] }} ha gastado:</span>
+            <span class="gasto-amount">{{ '%.2f'|format(g.cantidad) }}€</span>
+            <span class="gasto-desc">{{ g.descripcion }}</span>
+            <span class="gasto-date">{{ g.timestamp|formato_fecha }}</span>
+
+            {# Botón eliminar solo para el autor #}
+            {% if g.usuario_id == session['usuario_id'] %}
+            <div class="acciones">
+              <form action="{{ url_for('eliminar_gasto', gasto_id=g.id) }}" method="post" onsubmit="return confirm('¿Eliminar este gasto?');">
+                <button type="submit" class="btn-link">Eliminar</button>
+              </form>
+            </div>
+            {% endif %}
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('dashboard') }}" class="back-link">
+      ← Volver al panel principal
+    </a>
+  </div>
+</div>
+{% endblock %}

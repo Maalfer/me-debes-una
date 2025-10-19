@@ -1,0 +1,23 @@
+# --- Archivos de entorno ---
+.env
+
+# --- Base de datos SQLite (dentro de instance) ---
+instance/deudas.db
+
+# --- Archivos de caché de Python ---
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# --- Archivos temporales ---
+*.log
+*.tmp
+*.bak
+
+# --- Archivos de configuración locales ---
+*.sqlite3
+*.db
+
+# --- Entornos virtuales ---
+librerias/

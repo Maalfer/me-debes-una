@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Inicio - Deudas App</title>
+
+    <!-- Fuente -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Hoja de estilos externa -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Bienvenido a Me Debes Una</h1>
+        <p>Gestiona tus deudas y gastos compartidos con amigos de forma sencilla, segura y sin complicaciones.</p>
+        
+        <div class="button-group">
+            <a href="{{ url_for('login') }}">
+                <button>
+                    <span>🔑</span> Iniciar sesión
+                </button>
+            </a>
+            <a href="{{ url_for('registro') }}">
+                <button class="secondary">
+                    <span>📝</span> Registrarse
+                </button>
+            </a>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">💸</div>
+                <h3>Control total</h3>
+                <p>Registra y organiza todas tus deudas y préstamos en un solo lugar.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">👥</div>
+                <h3>Comparte gastos</h3>
+                <p>Divide cuentas fácilmente y lleva el control de quién debe qué.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🔒</div>
+                <h3>Seguridad</h3>
+                <p>Tus datos protegidos con cifrado y autenticación segura.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

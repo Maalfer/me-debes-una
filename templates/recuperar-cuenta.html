@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Recuperar cuenta{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="recover-page">
+  <div class="recover-card">
+    <h2 class="recover-title">Recuperar cuenta</h2>
+    <p class="recover-help">
+      Introduce tu <strong>nick</strong> y una <strong>nueva contraseña</strong>.
+      Un administrador deberá aprobar tu solicitud para que el cambio se aplique.
+    </p>
+
+    <form action="{{ url_for('recuperar_cuenta') }}" method="post" autocomplete="off" class="recover-form">
+      <div>
+        <label for="nick">Nick</label>
+        <input type="text" id="nick" name="nick" required placeholder="Tu nick">
+      </div>
+
+      <div>
+        <label for="password">Nueva contraseña</label>
+        <input type="password" id="password" name="password" required minlength="6" placeholder="Mínimo 6 caracteres">
+      </div>
+
+      <div>
+        <label for="password2">Confirmar nueva contraseña</label>
+        <input type="password" id="password2" name="password2" required minlength="6" placeholder="Repite la contraseña">
+      </div>
+
+      <div class="recover-actions">
+        <button type="submit" class="btn btn-prim">Enviar solicitud</button>
+        <a class="btn" href="{{ url_for('login') }}">Volver</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

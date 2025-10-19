@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Perfil de Usuario{% endblock %}
+
+{% block extra_head %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+      --bg-primary: #1e1e2f;
+      --bg-secondary: #2c2c3e;
+      --bg-tertiary: #3a3a4f;
+      --accent-color: #ffcc00;
+      --accent-hover: #e6b800;
+      --text-primary: #ffffff;
+      --text-secondary: #d1d1d1;
+      --border-radius: 8px;
+      --box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+      --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  }
+  .perfil-container { background-color: var(--bg-secondary); padding: 40px; border-radius: var(--border-radius); box-shadow: var(--box-shadow); width: 100%; max-width: 500px; margin: 40px auto; text-align: center; position: relative; overflow: hidden; }
+  .perfil-container::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, var(--accent-color), #ff9900); }
+  .perfil-container h1 { color: var(--accent-color); margin-bottom: 25px; font-size: 28px; font-weight: 700; position: relative; padding-bottom: 10px; }
+  .perfil-container h1::after { content: ''; position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); width: 80px; height: 3px; background-color: var(--accent-color); border-radius: 3px; }
+  .avatar-container { position: relative; width: 150px; height: 150px; margin: 0 auto 25px; }
+  .perfil-container img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; border: 4px solid var(--accent-color); box-shadow: 0 0 20px rgba(255, 204, 0, 0.3); transition: var(--transition); }
+  .avatar-container:hover img { transform: scale(1.05); box-shadow: 0 0 30px rgba(255, 204, 0, 0.4); }
+  .avatar-edit-icon { position: absolute; bottom: 10px; right: 10px; background-color: var(--accent-color); color: var(--bg-primary); width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; cursor: pointer; transition: var(--transition); border: 2px solid var(--bg-secondary); }
+  .avatar-edit-icon:hover { transform: scale(1.1); background-color: var(--accent-hover); }
+  .perfil-form { display: flex; flex-direction: column; gap: 20px; }
+  .form-group { text-align: left; }
+  .perfil-form label { display: block; margin-bottom: 8px; color: var(--accent-color); font-weight: 500; font-size: 15px; }
+  .perfil-form input[type="text"], .perfil-form input[type="email"] { padding: 14px 16px; border: none; border-radius: var(--border-radius); background-color: var(--bg-tertiary); color: var(--text-primary); font-size: 16px; width: 100%; transition: var(--transition); border: 1px solid transparent; }
+  .perfil-form input:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.2); }
+  .file-input-container { position: relative; overflow: hidden; display: inline-block; width: 100%; }
+  .file-input-label { display: block; padding: 12px; background-color: var(--bg-tertiary); color: var(--text-primary); border-radius: var(--border-radius); text-align: center; cursor: pointer; transition: var(--transition); border: 1px dashed rgba(255, 204, 0, 0.3); }
+  .file-input-label:hover { background-color: rgba(58, 58, 79, 0.7); border-color: var(--accent-color); }
+  .file-input-label span { display: block; margin-top: 5px; font-size: 13px; color: var(--text-secondary); }
+  .perfil-form input[type="file"] { position: absolute; left: 0; top: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+  .perfil-form button { margin-top: 15px; padding: 14px; background-color: var(--accent-color); color: var(--bg-primary); border: none; border-radius: var(--border-radius); font-weight: 600; cursor: pointer; transition: var(--transition); font-size: 16px; letter-spacing: 0.5px; text-transform: uppercase; }
+  .perfil-form button:hover { background-color: var(--accent-hover); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); }
+  .volver-btn { display: inline-flex; align-items: center; margin-top: 25px; color: var(--accent-color); text-decoration: none; font-weight: 600; transition: var(--transition); gap: 8px; }
+  .volver-btn:hover { color: var(--accent-hover); text-decoration: underline; transform: translateX(-5px); }
+  @media (max-width: 768px) { .perfil-container { padding: 30px; margin: 30px 20px; } }
+  @media (max-width: 480px) { .perfil-container { padding: 25px 20px; margin: 20px 15px; } .avatar-container { width: 120px; height: 120px; } .perfil-container h1 { font-size: 24px; } .perfil-form input[type="text"], .perfil-form input[type="email"] { padding: 12px 14px; } }
+  .file-chosen { font-size: 12px; color: var(--text-secondary); margin-top: 6px; text-align: center; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="perfil-container">
+  <h1>Editar Perfil</h1>
+
+  <!-- Imagen de perfil -->
+  <div class="avatar-container">
+    <!-- Cache buster para evitar que el navegador muestre la antigua después de actualizar -->
+    <img id="avatarPreview" src="{{ url_for('static', filename='perfiles/' + usuario.imagen) }}?v={{ usuario.imagen }}" alt="Foto de perfil">
+    <label for="imagen" class="avatar-edit-icon" title="Cambiar foto">✏️</label>
+  </div>
+
+  <!-- Ajuste 1: action explícito -->
+  <form id="perfilForm" action="{{ url_for('perfil') }}" method="post" class="perfil-form" enctype="multipart/form-data" novalidate>
+    <div class="form-group">
+      <label for="nick">Nombre de usuario</label>
+      <input type="text" id="nick" name="nick" value="{{ usuario.nick }}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="email">Correo electrónico</label>
+      <input type="email" id="email" name="email" value="{{ usuario.email }}" required>
+    </div>
+
+    <div class="form-group">
+      <label for="imagen">Foto de perfil</label>
+      <div class="file-input-container">
+        <label for="imagen" class="file-input-label">
+          Seleccionar archivo
+          <span>Imágenes (máx. 10MB). Se optimiza automáticamente.</span>
+        </label>
+        <input type="file" id="imagen" name="imagen" accept="image/*">
+      </div>
+      <div class="file-chosen" id="fileChosen"></div>
+    </div>
+
+    <button type="submit">Guardar Cambios</button>
+  </form>
+
+  <a href="{{ url_for('dashboard') }}" class="volver-btn">
+    <span>←</span> Volver al Dashboard
+  </a>
+</div>
+
+<script>
+  const input = document.getElementById('imagen');
+  const chosen = document.getElementById('fileChosen');
+  const preview = document.getElementById('avatarPreview');
+  const form = document.getElementById('perfilForm');
+
+  // Previsualización
+  input.addEventListener('change', () => {
+    const file = input.files && input.files[0];
+    if (!file) return;
+    chosen.textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = e => { preview.src = e.target.result; };
+    reader.readAsDataURL(file);
+  });
+
+  // Ajuste 2: log de envío para verificar que el navegador hace POST
+  form.addEventListener('submit', (e) => {
+    console.debug('[perfil.html] Enviando formulario a {{ url_for("perfil") }} con multipart/form-data');
+  });
+</script>
+{% endblock %}

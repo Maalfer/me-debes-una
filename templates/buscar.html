@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Buscar usuarios - Deudas App</title>
+
+    <!-- Fuente (igual que el resto) -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Hoja de estilos global -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body class="search-page">
+    <div class="container">
+        <div class="search-logo">Deudas App</div>
+        <h2 class="search-title">Resultados de la búsqueda</h2>
+        
+        <ul class="search-list">
+            {% for r in resultados %}
+                <li class="search-item">
+                    <span class="search-nick">{{ r.nick }}</span>
+                    <a class="search-link" href="{{ url_for('enviar_peticion', id=r.id) }}">
+                        <span>📤</span> Enviar solicitud
+                    </a>
+                </li>
+            {% else %}
+                <li class="no-results">No se encontraron usuarios</li>
+            {% endfor %}
+        </ul>
+        
+        <div class="links">
+            <a href="{{ url_for('dashboard') }}" class="back-link">
+                <span>←</span> Volver al panel
+            </a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demasiadas solicitudes</title>
+    <style>
+        /* Estilo general */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2c2c2c 100%);
+            color: #e0e0e0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Contenedor principal */
+        .error-container {
+            background-color: #252525;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            max-width: 600px;
+            width: 90%;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        /* Animación de entrada */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilo de la imagen de error */
+        .error-image {
+            max-width: 200px;
+            width: 100%;
+            margin-bottom: 1.5rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        /* Título */
+        h1 {
+            color: #ff4d4d;
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        /* Párrafos */
+        p {
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+            font-size: 1rem;
+            color: #b0b0b0;
+        }
+
+        /* Botón */
+        .btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #007bff, #00aaff);
+            color: #ffffff;
+            padding: 0.75rem 1.5rem;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Efectos para pantallas pequeñas */
+        @media (max-width: 600px) {
+            .error-container {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.5rem;
+            }
+            .error-image {
+                max-width: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <!-- Imagen de error personalizada -->
+        <img src="{{ url_for('static', filename='cocker-policia.png') }}" alt="Error: Demasiadas solicitudes" class="error-image">
+        <h1>Demasiadas solicitudes</h1>
+        <p>Estás intentando visitar una página que no deberías tener acceso, o bien demasiadas peticiones en poco tiempo.</p>
+        <p>Por favor, espera unos segundos y vuelve a intentarlo.</p>
+        <a href="{{ url_for('index') }}" class="btn">Volver al inicio</a>
+    </div>
+</body>
+</html>
